@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
-const tokenfile = require('../bconf.json');
+const conf = require('../bconf.json');
 const db = require('mongodb').MongoClient;
-const uri = tokenfile.uri;
+const uri = conf.uri;
 const mongo = new db(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 module.exports = {

@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
-const tokenfile = require('./bconf.json');
-const prefix = tokenfile.prefix;
+const conf = require('./bconf.json');
+const prefix = conf.prefix;
 const fs = require('fs');
 const bot = new Discord.Client();
 

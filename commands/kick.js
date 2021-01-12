@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const tokenfile = require('../bconf.json');
+const conf = require('../bconf.json');
 
 module.exports = {
     name: 'kick',
