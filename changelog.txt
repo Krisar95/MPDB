@@ -1,0 +1,23 @@
+Beginning of recording the changelog // Jun. 19th 2020
+~ Added changelog.txt
+~ Added a word blacklist
+~ Added a warning system
+~ Added basic mod commands yesterday
+~ Minor bug fixes
+
+Jul 31st 2020 /
+~ Major update ~
+* Updated the ban command to be up to V12 spec
+* Added unban
+* Added a report system
+* Linked all moderation commands to a global database that the bot can access
+* Added a couple recreation commands
+* Added the isbanned command for QOL reasons
+* Made sure the AV command played GIFs properly, resized the image to a legible size
+- Removed -cat because the API has been shut down
+
+Aug 16th 2020
+* Added Message delete/edit logging
+* Fixed undefined bug that would happen if nobody was mentioned with the RKO command
+* Added a memo system
+* 
