@@ -73,15 +73,46 @@ mongo.connect(async err => {
 
     bot.on('message', async message => {
       
- 
-      
       if(message.author.bot) return;
       if(!message.guild) return;
+
+      // on first admin message, create a message-logs channel under "bot logs" category if a message-logs channel doesn't already exist
+      // and then sends the admin a DM with instructions on how to change channel perms for appropriate users/roles.
       let channel = message.guild.channels.cache.find(channel => channel.name === "message-logs" );
-      
-      if(!channel) {
-        message.guild.channels.create("message-logs");
-        message.channel.send("As I didn't find a message logs channel, I created one.")
+
+      if(!channel && message.guild.member(message.author).hasPermission("ADMINISTRATOR")) {
+        let guild = message.guild
+        await message.guild.channels.create("Bot logs", {
+          type: 'category',
+          permissionOverwrites: [
+            {
+              id: guild.id,
+              deny: ['VIEW_CHANNEL']
+            },
+            {
+              id: message.author.id,
+              allow: ["VIEW_CHANNEL", "SEND_MESSAGES"]
+            }
+          ]
+        })
+        
+        .then( category => message.guild.channels.create("message-logs", {
+          type: 'text',
+          parent: category.id,
+          permissionOverwrites: [
+            {
+              id: guild.id,
+              deny: ['VIEW_CHANNEL']
+            },
+
+            {
+              id: message.author.id,
+              allow: ["VIEW_CHANNEL"]
+            }
+          ]
+        }));
+
+        message.author.send("As I didn't find a message logs channel, I created one under the `Bot logs` category. Remember to set the correct permissions! \n\nHere's how you do that: \nhttps://support.discord.com/hc/en-us/articles/206029707-How-do-I-set-up-Permissions-")
       }
 
       if(!message.content.startsWith(res.prefix)) return;
