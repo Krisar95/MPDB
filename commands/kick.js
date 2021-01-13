@@ -12,6 +12,7 @@ module.exports = {
         if(!channel) {
             let cat = message.guild.channels.cache.find(channel => channel.name === "Bot logs")
             let roleid = message.member(message.author).roles.highest;
+            let botrole = message.guild.roles.cache.find(r => r.name === "MBDB");
             let guild = message.guild
             
             await message.guild.channels.create("moderation-logs", {
@@ -26,6 +27,11 @@ module.exports = {
                 {
                   id: roleid,
                   allow: ["VIEW_CHANNEL"]
+                },
+                
+                {
+                  id: botrole.id,
+                  allow: ['VIEW_CHANNEL'] 
                 }
               ]
             });

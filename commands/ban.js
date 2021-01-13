@@ -11,6 +11,7 @@ module.exports = {
         let channel = message.guild.channels.cache.find(channel => channel.name === "moderation-logs");
         if(!channel) {
             let cat = message.guild.channels.cache.find(channel => channel.name === "Bot logs")
+            let botrole = message.guild.roles.cache.find(r => r.name === "MBDB");
             let roleid = message.member(message.author).roles.highest;
             let guild = message.guild
 
@@ -26,6 +27,11 @@ module.exports = {
                 {
                   id: roleid,
                   allow: ["VIEW_CHANNEL"]
+                },
+                
+                {
+                  id: botrole.id,
+                  allow: ['VIEW_CHANNEL'] 
                 }
               ]
             });

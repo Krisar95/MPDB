@@ -1,10 +1,10 @@
 const Discord = require('discord.js');
 require('dotenv').config()
-const func = require('./functions');
 const fs = require('fs');
 const token = process.env.TOKEN;
-const prefix = "$"
 const bot = new Discord.Client();
+
+
 
 
   fs.readdir("./commands", (err, files) => {
@@ -45,8 +45,8 @@ const bot = new Discord.Client();
 
   bot.on("ready", () => {
       console.log(`${bot.user.username} is online!`);
-      bot.user.setActivity(`Alpha 0.275.26 ($)`, {
-          type: "WATCHING"
+      bot.user.setActivity(`Alpha 0.275.57`, {
+          type: "PLAYING"
         }
       );
   })
@@ -56,6 +56,10 @@ const bot = new Discord.Client();
   bot.mongoose = require('./utils/mongoose');
 
   bot.on("message", async (message) => {
+    
+      const Guild = require('./models/guild');
+      const doc = await Guild.findOne({gid: `${message.guild.id}`})
+      
       if(message.author.bot) return;
       if(!message.guild) return;
       
@@ -97,10 +101,10 @@ const bot = new Discord.Client();
       
         message.author.send("As I didn't find a message logs channel, I created one under the `Bot logs` category. Remember to set the correct permissions! \n\nHere's how you do that: \nhttps://support.discord.com/hc/en-us/articles/206029707-How-do-I-set-up-Permissions-")
       }
-      if(!message.content.startsWith(prefix)) return;
+      if(!message.content.startsWith(doc.defaultPrefix)) return;
       //if(message.guild.id !== "653024881348182016") return message.channel.send("I'm currently being rewritten, my commands are useless here.")
       
-      let args = message.content.slice(prefix.length).trim().split(/ +/);
+      let args = message.content.slice(doc.defaultPrefix.length).trim().split(/ +/);
       let cmd = args.shift().toLowerCase();
       if (!cmd.length) return;
       let command = bot.commands.get(cmd);

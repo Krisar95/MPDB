@@ -8,7 +8,8 @@ module.exports = {
         guild = new Guild({
             _id: mongoose.Types.ObjectId(),
             gid: guild.id,
-            gname: guild.name
+            gname: guild.name,
+            defaultPrefix: "$"
         });
     
         guild.save()
