@@ -1,3 +1,0 @@
-Bæta við arguement functionality fyrir purge (bots, @mention, purge match)
-Self RKO (X)
-Message delete/edit logging (X)
