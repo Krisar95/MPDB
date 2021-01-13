@@ -1,5 +1,6 @@
 # MPDB
 The multi-purpose discord bot!
+Written in Node.JS
  
 # But why?
 There are arguably millions of bots that operate on discord. Hundreds of them are big production bots.
