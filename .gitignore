@@ -4110,3 +4110,4 @@ node_modules/xdg-basedir/readme.md
 bconf.json
 *.json
 *.env
+*.txt
