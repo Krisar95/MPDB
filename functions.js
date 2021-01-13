@@ -1,54 +1,10 @@
 const Discord = require('discord.js');
-const conf = require('./bconf.json');
-const prefix = conf.prefix;
+require('dotenv').config()
 const fs = require('fs');
 const bot = new Discord.Client();
-
-exports.fetchCommands = function () {
-
-    bot.commands = new Discord.Collection();
-    bot.other = new Discord.Collection();
-
-    fs.readdir("./commands", (err, files) => {
-        if(err) console.log(err);
-        let jsFile = files.filter(f => f.split(".").pop() === "js")
-        if(jsFile.length <= 0) {
-        console.log("Couldn't find any commands!")
-        return;
-        }
-    
-        // Loops through the /commands/ folder to find out what commands are there and usable
-        jsFile.forEach((f, i) => {
-        let props = require(`./commands/${f}`);
-        console.log(`${f} loaded successfully.`);
-        bot.commands.set(props.name, props)
-        bot.other.set(props.alias, props)
-        });
-    });
-}
-
-exports.runCommands = function(message) {
-
-    let args = message.content.slice(prefix.length).trim().split(/ +/);
-    let cmd = args.shift().toLowerCase();
-    if (!cmd.length) return;
-    let command = bot.commands.get(cmd);
-    // Start command handler 
-    try {
-      console.log(command)
-      if(command.mod && !message.member.hasPermission("KICK_MEMBERS")) throw("You don't have the perms to use this command");
-      command.execute(message, args);
-      console.log(command)
-    } catch (e) {
-      const error = new Discord.MessageEmbed()
-      .setColor("RED")
-      .setAuthor("Error 🛑")
-      .setDescription(`Error running ${command.name}: `)
-      .addFields({name: "Error message:", value: e, inline: false}, {name:"Required parameters:", value: command.params, inline: false })
-
-      message.channel.send(error)
-    }
-}
+const db = require('mongodb').MongoClient;
+const uri = process.env.URI;
+const mongo = new db(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 exports.edited = async (oldMessage,newMessage) => {
     if(oldMessage.author.bot) return;
