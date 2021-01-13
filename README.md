@@ -1,5 +1,6 @@
 # MPDB
 The multi-purpose discord bot!
+
 Written in Node.JS
  
 # But why?
@@ -15,5 +16,7 @@ Use at will.
 
 # Where can I find it?
 You can find it on discord.me
+
 https://discord.me/mpdb
+
 Invite for the bot + invite to the support server is listed in the link above!
