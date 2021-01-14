@@ -1,8 +1,4 @@
 const Discord = require('discord.js');
-const conf = require('../bconf.json');
-const db = require('mongodb').MongoClient;
-const uri = conf.uri;
-const mongo = new db(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 module.exports = {
     name: 'clear',
@@ -10,8 +6,6 @@ module.exports = {
     desc: 'Deletes 99 messages of any kind from the channel',
     mod: 1,
     execute(message, args) {
-        message.delete()
-        message.channel.send("Cleared chat.")
-        message.channel.bulkDelete(99)
+        message.channel.send("Nope")
     }
 }

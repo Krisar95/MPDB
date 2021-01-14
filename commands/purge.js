@@ -1,32 +1,26 @@
 const Discord = require('discord.js');
-const conf = require('../bconf.json');
-const db = require('mongodb').MongoClient;
-const uri = conf.uri;
-const mongo = new db(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 module.exports = {
     name: 'purge',
     alias: [],
-    desc: 'Deletes [amount, defaults to 20 if not specified] messages by [bots, images, @mention].',
+    desc: 'Deletes [amount(required)] messages by [bots, @mention].',
     params: ['mention', 'type'],
     mod: 1,
     execute: async (message, args) => {
-        
-        message.delete()
 
-        let amount = args[0]
-        if(message.mentions.users.first()) {
-            let amount = args.join(" ").slice(22);
-            let user = message.mentions.users.first(); 
-            await message.channel.messages.fetch({limit: amount}).then(messages => {
-                message.channel.bulkDelete(messages);
-            })
-        }
-        await message.channel.messages.fetch({limit: amount}).then(messages => {
-            message.channel.bulkDelete(messages);
+        let channel = message.guild.channels.cache.find(c => c.name === "message-logs");
+        let mention = message.mentions.users.first();
+        let amount = args[1]
+        if(!amount) return message.channel.send("Please provide number of messages")
+        message.channel.messages.fetch({limit: amount})
+        .then(fetchedMessages => {
+            console.log(fetchedMessages)
+            let toDelete = null;
+            if(!args[1]) toDelete = fetchedMessages.filter(message => (message))
+            if(args[0] == mention) toDelete = fetchedMessages.filter(message => (message.author.id == mention.id))
+            if(args[0] == "bots") toDelete = fetchedMessages.filter(message => (message.author.bot))
+            return message.channel.bulkDelete(toDelete, true);
         })
-        
-        //let amount = args.join(" ").slice(22)
-        //message.channel.bulkDelete(amount)
+        .then(deletedMessages => channel.send(`Deleted **${deletedMessages.size}** message${deletedMessages.size !== 1 ? 's' : ''} from <#${message.channel.id}>.`))
     }
 }
