@@ -45,7 +45,7 @@ const bot = new Discord.Client();
 
   bot.on("ready", () => {
       console.log(`${bot.user.username} is online!`);
-      bot.user.setActivity(`Alpha 0.275.57`, {
+      bot.user.setActivity(`Alpha 0.275.59`, {
           type: "PLAYING"
         }
       );
@@ -56,12 +56,12 @@ const bot = new Discord.Client();
   bot.mongoose = require('./utils/mongoose');
 
   bot.on("message", async (message) => {
-    
-      const Guild = require('./models/guild');
-      const doc = await Guild.findOne({gid: `${message.guild.id}`})
-      
+
       if(message.author.bot) return;
       if(!message.guild) return;
+
+      const Guild = require('./models/guild');
+      const doc = await Guild.findOne({gid: `${message.guild.id}`})
       
       // on first admin message, create a message-logs channel under "bot logs" category if a message-logs channel doesn't already exist
       // and then sends the admin a DM with instructions on how to change channel perms for appropriate users/roles.
@@ -69,38 +69,16 @@ const bot = new Discord.Client();
       
       if(!channel && message.guild.member(message.author).hasPermission("ADMINISTRATOR")) {
         let guild = message.guild
-        await message.guild.channels.create("Bot logs", {
-          type: 'category',
-          permissionOverwrites: [
-            {
-              id: guild.id,
-              deny: ['VIEW_CHANNEL']
-            },
-            {
-              id: message.author.id,
-              allow: ["VIEW_CHANNEL", "SEND_MESSAGES"]
-            }
-          ]
-        })
-          
+        let botrole = message.guild.roles.cache.find(r => r.name === "MPDB")
+        await message.guild.channels.create("Bot logs", { type: 'category', permissionOverwrites: [{id: guild.id, deny: [ 'VIEW_CHANNEL' ]}, {id: message.author.id, allow: [ "VIEW_CHANNEL" ]}, {id: botrole.id, allow: [ 'VIEW_CHANNEL' ]} ]} )
         .then( category => message.guild.channels.create("message-logs", {
           type: 'text',
-          parent: category.id,
-          permissionOverwrites: [
-            {
-              id: guild.id,
-              deny: ['VIEW_CHANNEL']
-            },
-      
-            {
-              id: message.author.id,
-              allow: ["VIEW_CHANNEL"]
-            }
-          ]
+          parent: category.id
         }));
       
         message.author.send("As I didn't find a message logs channel, I created one under the `Bot logs` category. Remember to set the correct permissions! \n\nHere's how you do that: \nhttps://support.discord.com/hc/en-us/articles/206029707-How-do-I-set-up-Permissions-")
       }
+      
       if(!message.content.startsWith(doc.defaultPrefix)) return;
       //if(message.guild.id !== "653024881348182016") return message.channel.send("I'm currently being rewritten, my commands are useless here.")
       
