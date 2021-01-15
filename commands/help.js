@@ -8,7 +8,7 @@ module.exports = {
     params: [],
     desc: "Displays this command list",
     mod: 0,
-    execute: async (message, args) => {
+    execute: async (bot, message, args) => {
         
         message.react(`✅`);
         

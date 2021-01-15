@@ -7,7 +7,7 @@ module.exports = {
     desc: 'Mutes a user',
     params: ['mention', 'duration'],
     mod: 1,
-    execute: async (message, args) => {
+    execute: async (bot, message, args) => {
 
         let channel = message.guild.channels.cache.find(channel => channel.name === "moderation-logs");
         if(!channel) {

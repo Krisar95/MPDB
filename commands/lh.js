@@ -8,7 +8,7 @@ module.exports = {
     desc: "Audits a website via Google's lighthouse",
     params: ["url"],
     mod: 1,
-    execute: async (message, args) => {
+    execute: async (bot, message, args) => {
         const chrome = await chromeLauncher.launch({chromeFlags: ['--headless', '--no-sandbox']});
         const flags = {logLevel: 'quiet', output: 'html', port: chrome.port};
         const msg = await message.channel.send("Polling results... please wait");

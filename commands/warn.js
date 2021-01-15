@@ -8,7 +8,7 @@ module.exports = {
     desc: "Warns the user",
     mod: 1,
     params: ['@mention/id', 'reason'],
-    execute: async (message, args) => {
+    execute: async (bot, message, args) => {
 
         let channel = message.guild.channels.cache.find(channel => channel.name === "moderation-logs");
         if(!channel) {

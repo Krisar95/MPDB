@@ -5,7 +5,7 @@ module.exports = {
     alias: [],
     desc: 'Deletes 99 messages of any kind from the channel',
     mod: 1,
-    execute(message, args) {
+    execute(bot, message, args) {
         message.channel.send("Nope")
     }
 }

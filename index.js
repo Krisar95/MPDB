@@ -3,6 +3,8 @@ require('dotenv').config()
 const fs = require('fs');
 const token = process.env.TOKEN;
 const bot = new Discord.Client();
+const Guild = require('./models/guild');
+const guild = require('./models/guild');
 
 
 
@@ -43,9 +45,13 @@ const bot = new Discord.Client();
     });
   });
 
-  bot.on("ready", () => {
-      console.log(`${bot.user.username} is online!`);
-      bot.user.setActivity(`Alpha 0.275.59`, {
+  bot.on("ready", async () => {
+      console.log(`${bot.user.username} is online in ${bot.guilds.cache.size} servers!`);
+      let array = bot.guilds.cache
+      array.forEach(guild => {
+        console.log(guild.name);
+      });
+      bot.user.setActivity(`Alpha 0.275.65`, {
           type: "PLAYING"
         }
       );
@@ -70,13 +76,32 @@ const bot = new Discord.Client();
       if(!channel && message.guild.member(message.author).hasPermission("ADMINISTRATOR")) {
         let guild = message.guild
         let botrole = message.guild.roles.cache.find(r => r.name === "MPDB")
+        let category = message.guild.channels.cache.find(c => c.name === "Bot logs")
+
+        if(!category) {
         await message.guild.channels.create("Bot logs", { type: 'category', permissionOverwrites: [{id: guild.id, deny: [ 'VIEW_CHANNEL' ]}, {id: message.author.id, allow: [ "VIEW_CHANNEL" ]}, {id: botrole.id, allow: [ 'VIEW_CHANNEL' ]} ]} )
         .then( category => message.guild.channels.create("message-logs", {
           type: 'text',
           parent: category.id
         }));
-      
+        
         message.author.send("As I didn't find a message logs channel, I created one under the `Bot logs` category. Remember to set the correct permissions! \n\nHere's how you do that: \nhttps://support.discord.com/hc/en-us/articles/206029707-How-do-I-set-up-Permissions-")
+        } else {
+          message.guild.channels.create("message-logs", {
+            type: 'text',
+            parent: category.id,
+            permissionOverwrites: [
+              {
+                id: guild.id,
+                deny: ['VIEW_CHANNEL']
+              },
+              {
+                id: botrole.id,
+                allow: ['VIEW_CHANNEL']
+              }
+            ]
+          })
+        }
       }
       
       if(!message.content.startsWith(doc.defaultPrefix)) return;
@@ -89,7 +114,7 @@ const bot = new Discord.Client();
       // Start command handler 
       try {
         if(command.mod && !message.member.hasPermission("KICK_MEMBERS")) throw("You don't have the perms to use this command");
-        command.execute(message, args);
+        command.execute(bot, message, args);
       } catch (e) {
         const error = new Discord.MessageEmbed()
         .setColor("RED")

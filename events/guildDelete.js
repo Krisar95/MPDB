@@ -3,27 +3,17 @@ const mongoose = require("mongoose");
 const Guild = require("../models/guild");
 
 module.exports = {
-    event: "guildCreate",
+    event: "guildDelete",
     once: false,
     run: async (guild) => {
-        const guildObj = new Guild({
-            _id: mongoose.Types.ObjectId(),
-            gid: guild.id,
-            gname: guild.name,
-            defaultPrefix: "$"
-        });
-    
-        guildObj.save()
-        .then(result => console.log(result))
-        .catch(err => console.log(err));
 
-        const guildJoin = {
-            name: `${guild.name}`,
-            size: `${guild.memberCount}`,
-            region: `${guild.region}`
-        }
+        const q = {gid: guild.id};
+
+        Guild.deleteOne(q, function(err) {
+            if(err) console.log(err)
+            console.log(`Left guild: ${guild.name}`);
+        })
         
-        console.log(guildJoin);
 /*
         const embed = new Discord.MessageEmbed()
         .setAuthor("Thanks for adding me to your server!")
@@ -41,6 +31,3 @@ module.exports = {
   */      
     }
 }
-
-
-

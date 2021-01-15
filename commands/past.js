@@ -8,14 +8,15 @@ module.exports = {
     desc: "Lists user's past warns",
     mod: 1,
     params: ['@mention/id'],
-    execute: async (message, args) => {
+    execute: async (bot, message, args) => {
 
             if(!args[0]) throw("No mention or ID specified");
             let mention = message.mentions.users.first()
             if(!mention) mention = message.guild.members.cache.get(args[0])
             if(!mention) throw("ID or mention invalid");
+            console.log(mention)
 
-            const q = Warn.find({gid: message.guild.id, usr: mention.id}, function (err, res) {
+            const q = await Warn.find({gid: message.guild.id, usr: mention.id}, function (err, res) {
                 if(err) throw(err);
 
                 if(!res) {

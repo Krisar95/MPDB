@@ -6,7 +6,7 @@ module.exports = {
     alias: [],
     desc: 'Changes the default prefix for this guild',
     mod: 1,
-    execute: async (message, args) => {
+    execute: async (bot, message, args) => {
         if(!args) throw("You have to supply a new prefix!")
         
         const doc = await Guild.findOne({gid: `${message.guild.id}`});

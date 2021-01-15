@@ -11,7 +11,7 @@ module.exports = {
     desc: "Measures a website's performance stat through GTMetrix",
     params: ["url", "timeout"],
     mod: 1,
-    execute: async (message, args) => {
+    execute: async (bot, message, args) => {
         message.channel.send("Not in use.")
     }
 }

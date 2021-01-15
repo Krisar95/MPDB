@@ -6,7 +6,7 @@ module.exports = {
     desc: 'Deletes [amount(required)] messages by [bots, @mention].',
     params: ['mention', 'type'],
     mod: 1,
-    execute: async (message, args) => {
+    execute: async (bot, message, args) => {
 
         let channel = message.guild.channels.cache.find(c => c.name === "message-logs");
         let mention = message.mentions.users.first();
