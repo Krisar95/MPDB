@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const mongoose = require("mongoose");
 const Guild = require("../models/guild");
+const Q = require("../models/songQueue");
 
 module.exports = {
     event: "guildCreate",
@@ -14,6 +15,16 @@ module.exports = {
         });
     
         guildObj.save()
+        .then(result => console.log(result))
+        .catch(err => console.log(err));
+
+        const q = new Q({
+            _id     : mongoose.Types.ObjectId(),
+            gid     : guild.id,
+            songQ   : []
+        });
+        
+        q.save()
         .then(result => console.log(result))
         .catch(err => console.log(err));
 

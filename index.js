@@ -56,7 +56,8 @@ const guild = require('./models/guild');
         }
       );
   })
-
+  bot.servers = new Map();
+  bot.afk = new Map();
   bot.commands = new Discord.Collection();
   bot.other = new Discord.Collection();
   bot.mongoose = require('./utils/mongoose');
@@ -87,7 +88,7 @@ const guild = require('./models/guild');
         
         message.author.send("As I didn't find a message logs channel, I created one under the `Bot logs` category. Remember to set the correct permissions! \n\nHere's how you do that: \nhttps://support.discord.com/hc/en-us/articles/206029707-How-do-I-set-up-Permissions-")
         } else {
-          message.guild.channels.create("message-logs", {
+          await message.guild.channels.create("message-logs", {
             type: 'text',
             parent: category.id,
             permissionOverwrites: [
@@ -100,6 +101,9 @@ const guild = require('./models/guild');
                 allow: ['VIEW_CHANNEL']
               }
             ]
+          })
+          .then( () => {
+            message.author.send("As I didn't find a message logs channel, I created one under the `Bot logs` category. Remember to set the correct permissions! \n\nHere's how you do that: \nhttps://support.discord.com/hc/en-us/articles/206029707-How-do-I-set-up-Permissions-")
           })
         }
       }
@@ -126,9 +130,6 @@ const guild = require('./models/guild');
       }
       // End command handler
   })
-
-  bot.afk = new Map();
-  bot.mem = new Map();
 
 bot.mongoose.init();
 bot.login(token);

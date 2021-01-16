@@ -2,9 +2,8 @@ const Discord = require('discord.js');
 require('dotenv').config()
 const fs = require('fs');
 const bot = new Discord.Client();
-const db = require('mongodb').MongoClient;
-const uri = process.env.URI;
-const mongo = new db(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const Q = require('./models/songQueue');
+const ytdl = require('ytdl-core');
 
 exports.edited = async (oldMessage,newMessage) => {
     if(oldMessage.author.bot) return;
@@ -41,4 +40,21 @@ exports.deleted = async (message) => {
         )
     .setFooter(`Message ID: ${message.id}`)
     logChannel.send(embed);
+}
+
+exports.play = async (connection, message) => {
+    
+    var server = servers[message.guild.id];
+
+    server.dispatcher = connection.play(ytdl(server.queue[0].url, {filter: 'audioonly'}));
+    
+    server.queue.shift()
+
+    server.dispatcher.on("end", function() {
+        if(server.queue[0]) {
+            play(connection, message)
+        } else {
+            connection.disconnect();
+        }
+    })
 }

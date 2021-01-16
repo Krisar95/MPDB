@@ -12,6 +12,7 @@ module.exports = {
             await message.member.voice.channel.join().then(conn => {
                 message.react(`✅`)
                 console.log(`Joined ${conn.channel.name}`)
+                console.log(bot.voice.connections);
             })
         } else {
             message.react(`❌`)
