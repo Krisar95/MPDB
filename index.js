@@ -1,10 +1,9 @@
-const Discord = require('discord.js');
+const { Client, MessageEmbed, Collection } = require('discord.js');
 require('dotenv').config()
 const fs = require('fs');
 const token = process.env.TOKEN;
-const bot = new Discord.Client();
+const bot = new Client();
 const Guild = require('./models/guild');
-const guild = require('./models/guild');
 
 
 
@@ -56,10 +55,11 @@ const guild = require('./models/guild');
         }
       );
   })
+
   bot.servers = new Map();
   bot.afk = new Map();
-  bot.commands = new Discord.Collection();
-  bot.other = new Discord.Collection();
+  bot.commands = new Collection();
+  bot.other = new Collection();
   bot.mongoose = require('./utils/mongoose');
 
   bot.on("message", async (message) => {
@@ -120,7 +120,7 @@ const guild = require('./models/guild');
         if(command.mod && !message.member.hasPermission("KICK_MEMBERS")) throw("You don't have the perms to use this command");
         command.execute(bot, message, args);
       } catch (e) {
-        const error = new Discord.MessageEmbed()
+        const error = new MessageEmbed()
         .setColor("RED")
         .setAuthor("Error 🛑")
         .setDescription(`Error running ${command.name}: `)
